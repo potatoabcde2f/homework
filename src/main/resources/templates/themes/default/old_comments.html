@@ -1,10 +1,12 @@
 #if(null != article)
+<!-- 旧版评论模板（可能是Freemarker语法） -->
 <div id="${article.cid ?! 0}" class="comment-container">
     <div id="comments" class="clearfix">
         #if(article.allowComment)
         <span class="response">#if(null!=login_user) Hi，<a href="${login_user.homeUrl}" data-no-instant>${login_user.username}</a>
             如果你想 <a href="/logout" title="注销" data-no-instant>注销</a> ? #end</span>
 
+        <!-- 评论表单 -->
         <form method="post" id="comment-form" class="comment-form" role="form" onsubmit="return comment_reply();">
             <input type="hidden" name="coid"/>
             <input type="hidden" name="cid" value="${article.cid}"/>
@@ -23,6 +25,7 @@
         <span class="response">评论已关闭.</span>
         #end
 
+        <!-- 评论列表 -->
         #if(!is_empty(comments))
         <ol class="comment-list">
             #for(comment : comments.list)
@@ -48,6 +51,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- 子评论（回复） -->
                 #if(comment.levels > 0)
                 <div class="comment-children">
                     <ol class="comment-list">
@@ -84,6 +88,7 @@
             </li>
             #end
         </ol>
+        <!-- 评论分页 -->
         <div class="lists-navigator clearfix">
             <ol class="page-navigator">
                 #if(comments.hasPrevPage)
@@ -96,19 +101,22 @@
                 <li class="next"><a href="?cp=${comments.nextPage}#comments">→</a></li>
                 #end
             </ol>
-
         </div>
         #end
     </div>
 </div>
 #end
+<!-- 引入评论组件 -->
 #include('/comm/tale_comment.html')
 <script type="text/javascript">
+    /* 评论回复功能 */
     function reply_user(coid) {
         $('#comment-form input[name=coid]').val(coid);
         $("html,body").animate({scrollTop: $('div.comment-container').offset().top}, 500);
         $('#comment-form #textarea').focus();
     }
+
+    /* 提交评论的AJAX函数 */
     function comment_reply() {
         $.ajax({
             type: 'post',

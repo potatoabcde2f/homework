@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 页脚片段 -->
 <div th:fragment="footer-content">
     <footer class="footer text-right">
+        <!-- 版权信息和链接 -->
         2017 © <a th:href="@{https://github.com/zhisheng17/blog}" target="_blank">Blog</a><div class=""></div>
     </footer>
 </div>
+<!-- 页脚脚本片段 -->
 <body th:fragment="footer">
+<!-- 引入jQuery -->
 <script th:src="@{//cdn.bootcss.com/jquery/2.2.3/jquery.min.js}"></script>
+<!-- 引入Bootstrap JS -->
 <script th:src="@{//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<!-- 引入SweetAlert2提示框 -->
 <script th:src="@{//cdn.bootcss.com/limonte-sweetalert2/6.4.1/sweetalert2.min.js}"></script>
+<!-- 引入应用JS -->
 <script th:src="@{/admin/js/jquery.app.js}"></script>
+<!-- 引入基础JS -->
 <script th:src="@{/admin/js/base.js}"></script>
 </body>
 </html>

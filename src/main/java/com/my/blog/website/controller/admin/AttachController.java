@@ -30,9 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 附件管理
+ * 后台附件管理控制器。
  *
- * Created by 13 on 2017/2/21.
+ * - 支持附件列表展示
+ * - 支持上传与删除附件
  */
 @Controller
 @RequestMapping("admin/attach")
@@ -49,28 +50,27 @@ public class AttachController extends BaseController {
     private ILogService logService;
 
     /**
-     * 附件页面
-     *
-     * @param request
-     * @param page
-     * @param limit
-     * @return
+     * 附件列表页。
+     * @param request HTTP 请求对象
+     * @param page 页码，默认1
+     * @param limit 每页数量，默认12
+     * @return 模板视图名
      */
     @GetMapping(value = "")
     public String index(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "1") int page,
                         @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        PageInfo<AttachVo> attachPaginator = attachService.getAttachs(page, limit);
+        PageInfo<AttachVo> attachPaginator = attachService.getAttachs(page, limit); // 分页查询附件
         request.setAttribute("attachs", attachPaginator);
-        request.setAttribute(Types.ATTACH_URL.getType(), Commons.site_option(Types.ATTACH_URL.getType(), Commons.site_url()));
-        request.setAttribute("max_file_size", WebConst.MAX_FILE_SIZE / 1024);
+        request.setAttribute(Types.ATTACH_URL.getType(), Commons.site_option(Types.ATTACH_URL.getType(), Commons.site_url())); // 附件访问前缀
+        request.setAttribute("max_file_size", WebConst.MAX_FILE_SIZE / 1024); // KB 显示上限
         return "admin/attach";
     }
 
     /**
-     * 上传文件接口
-     *
-     * @param request
-     * @return
+     * 上传文件接口。
+     * @param request HTTP 请求对象
+     * @param multipartFiles 多文件表单字段
+     * @return 成功与失败文件列表
      */
     @PostMapping(value = "upload")
     @ResponseBody
@@ -78,22 +78,22 @@ public class AttachController extends BaseController {
     public RestResponseBo upload(HttpServletRequest request, @RequestParam("file") MultipartFile[] multipartFiles) throws IOException {
         UserVo users = this.user(request);
         Integer uid = users.getUid();
-        List<String> errorFiles = new ArrayList<>();
+        List<String> errorFiles = new ArrayList<>(); // 记录超出大小或失败的文件名
         try {
             for (MultipartFile multipartFile : multipartFiles) {
                 String fname = multipartFile.getOriginalFilename();
                 if (multipartFile.getSize() <= WebConst.MAX_FILE_SIZE) {
-                    String fkey = TaleUtils.getFileKey(fname);
-                    String ftype = TaleUtils.isImage(multipartFile.getInputStream()) ? Types.IMAGE.getType() : Types.FILE.getType();
+                    String fkey = TaleUtils.getFileKey(fname); // 生成唯一文件名
+                    String ftype = TaleUtils.isImage(multipartFile.getInputStream()) ? Types.IMAGE.getType() : Types.FILE.getType(); // 判断是否图片
                     File file = new File(CLASSPATH+fkey);
                     try {
-                        FileCopyUtils.copy(multipartFile.getInputStream(),new FileOutputStream(file));
+                        FileCopyUtils.copy(multipartFile.getInputStream(),new FileOutputStream(file)); // 写入磁盘
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    attachService.save(fname, fkey, ftype, uid);
+                    attachService.save(fname, fkey, ftype, uid); // 保存数据库记录
                 } else {
-                    errorFiles.add(fname);
+                    errorFiles.add(fname); // 超出大小限制
                 }
             }
         } catch (Exception e) {
@@ -103,10 +103,10 @@ public class AttachController extends BaseController {
     }
 
     /**
-     * 删除附件
-     * @param id
-     * @param request
-     * @return
+     * 删除附件。
+     * @param id 附件主键ID
+     * @param request HTTP 请求对象
+     * @return 操作结果
      */
     @RequestMapping(value = "delete")
     @ResponseBody
@@ -114,10 +114,10 @@ public class AttachController extends BaseController {
     public RestResponseBo delete(@RequestParam Integer id, HttpServletRequest request) {
         try {
             AttachVo attach = attachService.selectById(id);
-            if (null == attach) return RestResponseBo.fail("不存在该附件");
-            attachService.deleteById(id);
-            new File(CLASSPATH+attach.getFkey()).delete();
-            logService.insertLog(LogActions.DEL_ARTICLE.getAction(), attach.getFkey(), request.getRemoteAddr(), this.getUid(request));
+            if (null == attach) return RestResponseBo.fail("不存在该附件"); // 校验存在
+            attachService.deleteById(id); // 删除数据库记录
+            new File(CLASSPATH+attach.getFkey()).delete(); // 删除物理文件
+            logService.insertLog(LogActions.DEL_ARTICLE.getAction(), attach.getFkey(), request.getRemoteAddr(), this.getUid(request)); // 记录日志
         } catch (Exception e) {
             String msg = "附件删除失败";
             if (e instanceof TipException) msg = e.getMessage();

@@ -18,7 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * Created by 13 on 2017/2/21.
+ * 分类与标签管理控制器。
+ *
+ * - 分类/标签列表展示
+ * - 保存与删除分类
  */
 @Controller
 @RequestMapping("admin/category")
@@ -30,14 +33,14 @@ public class CategoryController extends BaseController {
     private IMetaService metasService;
 
     /**
-     * 分类页
-     * @param request
-     * @return
+     * 分类/标签页。
+     * @param request HTTP 请求
+     * @return 模板视图名
      */
     @GetMapping(value = "")
     public String index(HttpServletRequest request) {
-        List<MetaDto> categories = metasService.getMetaList(Types.CATEGORY.getType(), null, WebConst.MAX_POSTS);
-        List<MetaDto> tags = metasService.getMetaList(Types.TAG.getType(),  null, WebConst.MAX_POSTS);
+        List<MetaDto> categories = metasService.getMetaList(Types.CATEGORY.getType(), null, WebConst.MAX_POSTS); // 分类列表
+        List<MetaDto> tags = metasService.getMetaList(Types.TAG.getType(),  null, WebConst.MAX_POSTS); // 标签列表
         request.setAttribute("categories", categories);
         request.setAttribute("tags", tags);
         return "admin/category";
@@ -48,7 +51,7 @@ public class CategoryController extends BaseController {
     @Transactional(rollbackFor = TipException.class)
     public RestResponseBo saveCategory(@RequestParam String cname, @RequestParam Integer mid) {
         try {
-            metasService.saveMeta(Types.CATEGORY.getType(),cname,mid);
+            metasService.saveMeta(Types.CATEGORY.getType(),cname,mid); // 新增/更新分类
         } catch (Exception e) {
             String msg = "分类保存失败";
             if (e instanceof TipException) {
@@ -62,16 +65,16 @@ public class CategoryController extends BaseController {
     }
 
     /**
-     * 删除分类
-     * @param mid
-     * @return
+     * 删除分类。
+     * @param mid 分类主键ID
+     * @return 操作结果
      */
     @RequestMapping(value = "delete")
     @ResponseBody
     @Transactional(rollbackFor = TipException.class)
     public RestResponseBo delete(@RequestParam int mid) {
         try {
-            metasService.delete(mid);
+            metasService.delete(mid); // 删除分类（含关系处理）
         } catch (Exception e) {
             String msg = "删除失败";
             if (e instanceof TipException) {

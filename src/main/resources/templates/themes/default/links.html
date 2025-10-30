@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 友情链接页面 -->
 <div th:replace="themes/default/header::header(title='友情链接',keywords=null)"></div>
 <body>
 <article class="main-content post-page">
     <div id="post-content" class="post-content">
         <h3>友情链接</h3>
         <ul class="flinks">
+            <!-- 循环遍历友情链接 -->
             <th:block th:each="link : ${links}">
                 <li>🔒 <a th:href="${link.slug}" target="_blank" th:text="${link.name}"></a></li>
             </th:block>
@@ -19,6 +21,7 @@
             </ul>
         </blockquote>
         <h3>基本信息</h3>
+        <!-- 网站基本信息 -->
         <pre><code class="lang-md hljs markdown">
             网站名称：猿 Blog( zhisheng 的技术分享)
             网站地址：http://www.54tianzhisheng.cn</code></pre>

@@ -1,38 +1,43 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
+<!-- 前端分页导航片段 - 用于前台页面分页显示 -->
 <ol class="page-navigator" th:fragment="pageNav(pageInfo, prevText, nextText, prefix)">
+    <!-- 上一页按钮 -->
     <th:block th:if="${pageInfo.hasPreviousPage}">
         <li class="prev"><a th:href="@{'/'+${prefix}+'/'+${pageInfo.prePage}}" th:text="${prevText}"></a></li>
     </th:block>
 
-
+    <!-- 页码导航 -->
     <th:block th:each="navIndex :${ pageInfo.navigatepageNums}">
         <li th:class="${pageInfo.pageNum==navIndex}?'current':''"><a th:href="@{'/page/'+${navIndex}}"
                                                                      th:text="${navIndex}"></a></li>
     </th:block>
 
-
+    <!-- 下一页按钮 -->
     <th:block th:if="${pageInfo.hasNextPage}">
         <li class="next"><a th:href="@{'/'+${prefix}+'/'+${pageInfo.nextPage}}" th:text="${nextText}"></a></li>
     </th:block>
-
 </ol>
 
+<!-- 后台分页导航片段 - 用于后台管理页面分页显示 -->
 <div th:fragment="pageAdminNav(pageInfo)">
     <div class="clearfix">
         <ul class="pagination m-b-5 pull-right">
+            <!-- 上一页按钮 -->
             <li th:if="${pageInfo.hasPreviousPage}">
                 <a th:href="@{page=${pageInfo.prePage}}" aria-label="Previous">
                     <i class="fa fa-angle-left"></i>&nbsp;上一页
                 </a>
             </li>
 
+            <!-- 页码导航 -->
             <th:block th:each="nav : ${pageInfo.navigatepageNums}">
                 <li th:class="${nav==pageInfo.pageNum}?'active':''"><a th:href="@{'?page='+${nav}}" th:text="${nav}"></a>
                 </li>
             </th:block>
 
+            <!-- 下一页按钮 -->
             <th:block th:if="${pageInfo.hasNextPage}">
                 <li>
                     <a th:href="@{'?page='+${pageInfo.nextPage}}" aria-label="Next">
@@ -41,6 +46,7 @@
                 </li>
             </th:block>
 
+            <!-- 总页数显示 -->
             <li><span th:text="'共'+${pageInfo.pages}+'页'"></span></li>
         </ul>
     </div>

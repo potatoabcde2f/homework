@@ -3,20 +3,33 @@ package com.my.blog.website.modal.Vo;
 import java.util.ArrayList;
 import java.util.List;
 
+/**MyBatis Generator自动生成的Example类，用于构建relationship表的动态查询条件
+ * 主要用于构建文章与分类/标签的多对多关系查询
+ */
 public class RelationshipVoExample {
+    // ORDER BY 子句，用于排序
     protected String orderByClause;
 
+    // 是否去重查询
     protected boolean distinct;
 
+    // 查询条件列表，可以包含多个OR条件
     protected List<Criteria> oredCriteria;
 
+    // 分页限制，限制返回记录数
     private Integer limit;
 
+    // 分页偏移量，用于分页查询
     private Integer offset;
 
+    /**
+     * 构造函数，初始化查询条件列表
+     */
     public RelationshipVoExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
+
+    // ================ 基本getter/setter方法 ================
 
     public void setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
@@ -38,16 +51,27 @@ public class RelationshipVoExample {
         return oredCriteria;
     }
 
+    /**
+     * 添加OR条件
+     * @param criteria 已创建的Criteria对象
+     */
     public void or(Criteria criteria) {
         oredCriteria.add(criteria);
     }
 
+    /**创建OR条件并返回，用于链式调用
+     * @return 新创建的Criteria对象
+     */
     public Criteria or() {
         Criteria criteria = createCriteriaInternal();
         oredCriteria.add(criteria);
         return criteria;
     }
 
+    /**创建查询条件
+     * 如果当前没有条件，则添加一个默认条件
+     * @return Criteria对象
+     */
     public Criteria createCriteria() {
         Criteria criteria = createCriteriaInternal();
         if (oredCriteria.size() == 0) {
@@ -56,16 +80,25 @@ public class RelationshipVoExample {
         return criteria;
     }
 
+    /**
+     * 内部创建Criteria对象
+     * @return 新创建的Criteria对象
+     */
     protected Criteria createCriteriaInternal() {
         Criteria criteria = new Criteria();
         return criteria;
     }
 
+    /**
+     * 清空所有查询条件、排序和去重设置
+     */
     public void clear() {
         oredCriteria.clear();
         orderByClause = null;
         distinct = false;
     }
+
+    // ================ 分页相关方法 ================
 
     public void setLimit(Integer limit) {
         this.limit = limit;
@@ -83,7 +116,12 @@ public class RelationshipVoExample {
         return offset;
     }
 
+    /**
+     * 抽象的GeneratedCriteria类
+     * 包含所有字段的查询条件方法，由MyBatis Generator自动生成
+     */
     protected abstract static class GeneratedCriteria {
+        // 条件列表，存储所有的查询条件
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {
@@ -91,6 +129,10 @@ public class RelationshipVoExample {
             criteria = new ArrayList<Criterion>();
         }
 
+        /**
+         * 判断是否有有效条件
+         * @return 如果有条件返回true，否则返回false
+         */
         public boolean isValid() {
             return criteria.size() > 0;
         }
@@ -103,6 +145,10 @@ public class RelationshipVoExample {
             return criteria;
         }
 
+        /**
+         * 添加无条件查询条件（如IS NULL, IS NOT NULL）
+         * @param condition 条件表达式
+         */
         protected void addCriterion(String condition) {
             if (condition == null) {
                 throw new RuntimeException("Value for condition cannot be null");
@@ -110,233 +156,8 @@ public class RelationshipVoExample {
             criteria.add(new Criterion(condition));
         }
 
-        protected void addCriterion(String condition, Object value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            criteria.add(new Criterion(condition, value));
-        }
-
-        protected void addCriterion(String condition, Object value1, Object value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        public Criteria andCidIsNull() {
-            addCriterion("cid is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCidIsNotNull() {
-            addCriterion("cid is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCidEqualTo(Integer value) {
-            addCriterion("cid =", value, "cid");
-            return (Criteria) this;
-        }
-
-        public Criteria andCidNotEqualTo(Integer value) {
-            addCriterion("cid <>", value, "cid");
-            return (Criteria) this;
-        }
-
-        public Criteria andCidGreaterThan(Integer value) {
-            addCriterion("cid >", value, "cid");
-            return (Criteria) this;
-        }
-
-        public Criteria andCidGreaterThanOrEqualTo(Integer value) {
-            addCriterion("cid >=", value, "cid");
-            return (Criteria) this;
-        }
-
-        public Criteria andCidLessThan(Integer value) {
-            addCriterion("cid <", value, "cid");
-            return (Criteria) this;
-        }
-
-        public Criteria andCidLessThanOrEqualTo(Integer value) {
-            addCriterion("cid <=", value, "cid");
-            return (Criteria) this;
-        }
-
-        public Criteria andCidIn(List<Integer> values) {
-            addCriterion("cid in", values, "cid");
-            return (Criteria) this;
-        }
-
-        public Criteria andCidNotIn(List<Integer> values) {
-            addCriterion("cid not in", values, "cid");
-            return (Criteria) this;
-        }
-
-        public Criteria andCidBetween(Integer value1, Integer value2) {
-            addCriterion("cid between", value1, value2, "cid");
-            return (Criteria) this;
-        }
-
-        public Criteria andCidNotBetween(Integer value1, Integer value2) {
-            addCriterion("cid not between", value1, value2, "cid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMidIsNull() {
-            addCriterion("mid is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMidIsNotNull() {
-            addCriterion("mid is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMidEqualTo(Integer value) {
-            addCriterion("mid =", value, "mid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMidNotEqualTo(Integer value) {
-            addCriterion("mid <>", value, "mid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMidGreaterThan(Integer value) {
-            addCriterion("mid >", value, "mid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMidGreaterThanOrEqualTo(Integer value) {
-            addCriterion("mid >=", value, "mid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMidLessThan(Integer value) {
-            addCriterion("mid <", value, "mid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMidLessThanOrEqualTo(Integer value) {
-            addCriterion("mid <=", value, "mid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMidIn(List<Integer> values) {
-            addCriterion("mid in", values, "mid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMidNotIn(List<Integer> values) {
-            addCriterion("mid not in", values, "mid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMidBetween(Integer value1, Integer value2) {
-            addCriterion("mid between", value1, value2, "mid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMidNotBetween(Integer value1, Integer value2) {
-            addCriterion("mid not between", value1, value2, "mid");
-            return (Criteria) this;
-        }
-    }
-
-    /**
-     */
-    public static class Criteria extends GeneratedCriteria {
-
-        protected Criteria() {
-            super();
-        }
-    }
-
-    public static class Criterion {
-        private String condition;
-
-        private Object value;
-
-        private Object secondValue;
-
-        private boolean noValue;
-
-        private boolean singleValue;
-
-        private boolean betweenValue;
-
-        private boolean listValue;
-
-        private String typeHandler;
-
-        public String getCondition() {
-            return condition;
-        }
-
-        public Object getValue() {
-            return value;
-        }
-
-        public Object getSecondValue() {
-            return secondValue;
-        }
-
-        public boolean isNoValue() {
-            return noValue;
-        }
-
-        public boolean isSingleValue() {
-            return singleValue;
-        }
-
-        public boolean isBetweenValue() {
-            return betweenValue;
-        }
-
-        public boolean isListValue() {
-            return listValue;
-        }
-
-        public String getTypeHandler() {
-            return typeHandler;
-        }
-
-        protected Criterion(String condition) {
-            super();
-            this.condition = condition;
-            this.typeHandler = null;
-            this.noValue = true;
-        }
-
-        protected Criterion(String condition, Object value, String typeHandler) {
-            super();
-            this.condition = condition;
-            this.value = value;
-            this.typeHandler = typeHandler;
-            if (value instanceof List<?>) {
-                this.listValue = true;
-            } else {
-                this.singleValue = true;
-            }
-        }
-
-        protected Criterion(String condition, Object value) {
-            this(condition, value, null);
-        }
-
-        protected Criterion(String condition, Object value, Object secondValue, String typeHandler) {
-            super();
-            this.condition = condition;
-            this.value = value;
-            this.secondValue = secondValue;
-            this.typeHandler = typeHandler;
-            this.betweenValue = true;
-        }
-
-        protected Criterion(String condition, Object value, Object secondValue) {
-            this(condition, value, secondValue, null);
-        }
-    }
-}
+/**
+ * 添加单值查询条件
+ * @param condition 条件表达式
+ * @param value 条件值
+ * @param property 属性

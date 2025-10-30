@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='管理中心',active='home'">
+<!-- 仪表盘页面 - 后台管理首页 -->
 <header th:replace="admin/header::headerFragment(${title},${active})"></header>
 <body class="fixed-left">
 <div id="wrapper">
+    <!-- 引入头部导航 -->
     <div th:replace="admin/header::header-body"></div>
     <div class="content-page">
         <div class="content">
@@ -12,7 +14,9 @@
                         <h4 class="page-title">仪表盘</h4>
                     </div>
 
+                    <!-- 统计信息卡片 -->
                     <div class="row">
+                        <!-- 文章统计 -->
                         <div class="col-sm-6 col-lg-3">
                             <div class="mini-stat clearfix bx-shadow bg-info">
                                 <span class="mini-stat-icon"><i class="fa fa-quote-right" aria-hidden="true"></i></span>
@@ -21,6 +25,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- 评论统计 -->
                         <div class="col-sm-6 col-lg-3">
                             <div class="mini-stat clearfix bg-purple bx-shadow">
                                 <span class="mini-stat-icon"><i class="fa fa-comments-o" aria-hidden="true"></i></span>
@@ -29,7 +34,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- 附件统计 -->
                         <div class="col-sm-6 col-lg-3">
                             <div class="mini-stat clearfix bg-success bx-shadow">
                                 <span class="mini-stat-icon"><i class="fa fa-cloud-upload"
@@ -39,7 +44,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- 友链统计 -->
                         <div class="col-sm-6 col-lg-3">
                             <div class="mini-stat clearfix bg-primary bx-shadow">
                                 <span class="mini-stat-icon"><i class="fa fa-link" aria-hidden="true"></i></span>
@@ -50,7 +55,9 @@
                         </div>
                     </div>
 
+                    <!-- 内容区域 -->
                     <div class="row">
+                        <!-- 最新文章面板 -->
                         <div class="col-md-4">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -58,6 +65,7 @@
                                 </div>
                                 <div class="panel-body">
                                     <ul class="list-group">
+                                        <!-- 遍历最新文章 -->
                                         <li class="list-group-item" th:each="article : ${articles}">
                             <span class="badge badge-primary"
                                   th:title="${article.commentsNum}+'条评论'" th:text="${article.commentsNum}"></span>
@@ -68,24 +76,30 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- 最新留言面板 -->
                         <div class="col-md-4">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">最新留言</h4>
                                 </div>
                                 <div class="panel-body">
+                                    <!-- 如果没有留言 -->
                                     <div th:if="${comments}== null and ${#lists.size(comments)}==0">
                                         <div class="alert alert-warning">
                                             还没有收到留言.
                                         </div>
                                     </div>
+                                    <!-- 如果有留言 -->
                                     <ul class="list-group"
                                         th:unless="${comments}==null and ${#lists.size(comments)}==0">
+                                        <!-- 遍历最新留言 -->
                                         <li class="list-group-item" th:each="comment : ${comments}">
+                                            <!-- 有网址的留言者 -->
                                             <div th:if="${comment.url}!=null and ${comment.url}!=''">
                                                 <a th:href="@{${comment.url}}" target="_blank"
                                                    th:text="${comment.author}"></a>
                                             </div>
+                                            <!-- 无网址的留言者 -->
                                             <th:block th:unless="${comment.url}!=null and ${comment.url}!=''" th:text="${comment.author}"/>
                                             于<th:block th:text="${commons.fmtdate(comment.created,'MM月dd日HH:mm')}"/>：<a
                                                 th:href="${commons.site_url('/article/')}+${comment.cid}+'#comments'"
@@ -95,6 +109,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- 系统日志面板 -->
                         <div class="col-md-4">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -102,6 +117,7 @@
                                 </div>
                                 <div class="panel-body">
                                     <ul class="list-group" >
+                                        <!-- 遍历系统日志 -->
                                         <li class="list-group-item" th:each="log : ${logs}">
                                             <span th:text="${commons.fmtdate(log.created, 'yyyy-MM-dd HH:mm:ss')} +' => '+ ${log.action}"></span>
                                         </li>
@@ -111,11 +127,13 @@
                         </div>
                     </div>
                 </div>
+                <!-- 引入页脚内容 -->
                 <div th:replace="admin/footer :: footer-content"></div>
             </div>
         </div>
     </div>
 </div>
+<!-- 引入页脚脚本 -->
 <div th:replace="admin/footer :: footer"></div>
 </body>
 </html>

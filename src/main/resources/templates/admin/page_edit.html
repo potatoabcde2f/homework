@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='保存页面',active='page'">
+<!-- 页面编辑页面 - 用于创建或编辑静态页面 -->
 <header th:replace="admin/header::headerFragment(${title},${active})"></header>
+<!-- 引入开关按钮CSS -->
 <link th:href="@{/admin/plugins/toggles/toggles.css}" rel="stylesheet"/>
+<!-- 引入Markdown编辑器CSS -->
 <link th:href="@{/admin/plugins/md/css/style.css}" rel="stylesheet"/>
 <body class="fixed-left">
 <div id="wrapper">
+    <!-- 引入头部导航 -->
     <div th:replace="admin/header::header-body"></div>
     <div class="content-page">
         <div class="content">
@@ -12,6 +16,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <h4 class="page-title">
+                            <!-- 根据是否有页面内容显示不同的标题 -->
                             <th:block th:if="${null != contents}">
                                 编辑页面
                             </th:block>
@@ -21,58 +26,72 @@
                         </h4>
                     </div>
                     <div class="col-md-12">
+                        <!-- 页面表单 -->
                         <form id="articleForm" role="form" novalidate="novalidate">
+                            <!-- 隐藏字段 -->
                             <input type="hidden" name="categories" id="categories"/>
                             <input type="hidden" name="cid" th:value="${contents!=null and contents.cid!=null}?${contents.cid}: ''" id="cid"/>
                             <input type="hidden" name="status" th:value="${contents!=null and contents.status !=null}?${contents.status}: 'publish'" id="status"/>
                             <input type="hidden" name="content" id="content-editor"/>
 
+                            <!-- 页面标题输入框 -->
                             <div class="form-group">
                                 <input type="text" class="form-control" placeholder="请输入页面标题" name="title" required=""
                                        aria-required="true"  th:value="${contents!=null and contents.title!=null }?${contents.title}: ''"/>
                             </div>
 
+                            <!-- 页面访问名输入框 -->
                             <div class="form-group">
                                 <input type="text" class="form-control" placeholder="请输入页面访问名" name="slug" required=""
                                        aria-required="true" th:value="${contents!=null and contents.slug !=null}?${contents.slug}: ''"/>
                             </div>
 
+                            <!-- Markdown编辑器区域 -->
                             <div class="form-group">
                                 <textarea style="height: 450px" autocomplete="off" id="text" name="text" class="markdown-textarea" th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>
                             </div>
 
+                            <!-- 操作按钮 -->
                             <div class="text-right">
                                 <button type="submit" class="btn btn-primary waves-effect waves-light">保存页面</button>
                                 <button type="submit" class="btn btn-warning waves-effect waves-light">存为草稿</button>
                             </div>
                         </form>
                     </div>
-
                 </div>
+                <!-- 引入页脚内容 -->
                 <div th:replace="admin/footer :: footer-content"></div>
             </div>
         </div>
     </div>
 </div>
+<!-- 引入页脚脚本 -->
 <div th:replace="admin/footer :: footer"></div>
+
+<!-- 引入Markdown编辑器相关JS -->
 <script th:src="@{/admin/plugins/md/js/jquery.scrollto.js}"></script>
 <script th:src="@{/admin/plugins/md/js/pagedown.js}"></script>
 <script th:src="@{/admin/plugins/md/js/pagedown-extra.js}"></script>
 <script th:src="@{/admin/plugins/md/js/diff.js}"></script>
 <script th:src="@{/admin/plugins/md/js/md.js}"></script>
 
+<!-- 引入开关按钮JS -->
 <script th:src="@{//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js}"></script>
+<!-- 引入表单验证插件 -->
 <script th:src="@{//cdn.bootcss.com/jquery-validate/1.15.1/jquery.validate.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/jquery-validate/1.15.1/localization/messages_zh.min.js}"></script>
 <script type="text/javascript">
-    /*<![CDATA[*/
+    /* 初始化tale工具对象 */
     var tale = new $.tale();
-    // validate the comment form when it is submitted
+
+    /* 页面表单验证 */
     $('#articleForm').validate({
         submitHandler: function (form) {
+            // 设置隐藏字段值
             $('#content-editor').val($('#text').val());
             $("#articleForm #categories").val($('#multiple-sel').val());
             var params = $("#articleForm").serialize();
+            // 根据是否有页面ID决定使用修改还是发布接口
             var url = $('#articleForm #cid').val() != '' ? '/admin/page/modify' : '/admin/page/publish';
 
             tale.post({
@@ -83,6 +102,7 @@
                         tale.alertOk({
                             text:'页面保存成功',
                             then: function () {
+                                // 保存成功后跳转到页面列表
                                 setTimeout(function () {
                                     window.location.href = '/admin/page';
                                 }, 500);
@@ -96,13 +116,12 @@
         }
     });
 
+    /* 初始化Markdown编辑器 */
     var textarea = $('#text'),
         toolbar = $('<div class="markdown-editor" id="md-button-bar" />').insertBefore(textarea.parent())
     preview = $('<div id="md-preview" class="md-hidetab" />').insertAfter('.markdown-editor');
 
     markdown(textarea, toolbar, preview);
-    /*]]>*/
 </script>
-
 </body>
 </html>

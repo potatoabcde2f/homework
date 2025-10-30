@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 单页面模板：用于关于、自定义页面等 -->
 <div th:replace="themes/default/header::header(${article.title},null)"></div>
 <body>
 <article class="main-content post-page">
     <div class="post-header">
+        <!-- 页面标题 -->
         <h1 class="post-title" itemprop="name headline" th:text="${article.title}"></h1>
         <div class="post-data">
+            <!-- 发布时间 -->
             <time th:datetime="${commons.fmtdate(article.created)}" itemprop="datePublished" th:text="'发布于 '+ ${commons.fmtdate(article.created)}"></time>
         </div>
     </div>
+    <!-- 页面内容 -->
     <div id="post-content" class="post-content" th:utext="${commons.article(article.content)}"></div>
 </article>
+<!-- 评论区域 -->
 <div th:replace="themes/default/comments::comments"></div>
 <div th:replace="themes/default/footer::footer"></div>
 </body>

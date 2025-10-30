@@ -62,7 +62,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = {"/", "index"})
     public String index(HttpServletRequest request, @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        return this.index(request, 1, limit);
+        return this.index(request, 1, limit); // 默认第一页
     }
 
     /**
@@ -75,11 +75,11 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = "page/{p}")
     public String index(HttpServletRequest request, @PathVariable int p, @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        p = p < 0 || p > WebConst.MAX_PAGE ? 1 : p;
-        PageInfo<ContentVo> articles = contentService.getContents(p, limit);
-        request.setAttribute("articles", articles);
+        p = p < 0 || p > WebConst.MAX_PAGE ? 1 : p; // 页码边界
+        PageInfo<ContentVo> articles = contentService.getContents(p, limit); // 分页查询文章
+        request.setAttribute("articles", articles); // 绑定渲染数据
         if (p > 1) {
-            this.title(request, "第" + p + "页");
+            this.title(request, "第" + p + "页"); // 设置标题
         }
         return this.render("index");
     }
@@ -93,14 +93,14 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = {"article/{cid}", "article/{cid}.html"})
     public String getArticle(HttpServletRequest request, @PathVariable String cid) {
-        ContentVo contents = contentService.getContents(cid);
-        if (null == contents || "draft".equals(contents.getStatus())) {
+        ContentVo contents = contentService.getContents(cid); // 根据ID或slug取内容
+        if (null == contents || "draft".equals(contents.getStatus())) { // 草稿或不存在
             return this.render_404();
         }
         request.setAttribute("article", contents);
         request.setAttribute("is_post", true);
-        completeArticle(request, contents);
-        updateArticleHit(contents.getCid(), contents.getHits());
+        completeArticle(request, contents); // 加载评论列表
+        updateArticleHit(contents.getCid(), contents.getHits()); // 更新点击量（懒更新）
         return this.render("post");
     }
 
@@ -137,7 +137,7 @@ public class IndexController extends BaseController {
                 cp = "1";
             }
             request.setAttribute("cp", cp);
-            PageInfo<CommentBo> commentsPaginator = commentService.getComments(contents.getCid(), Integer.parseInt(cp), 6);
+            PageInfo<CommentBo> commentsPaginator = commentService.getComments(contents.getCid(), Integer.parseInt(cp), 6); // 评论分页
             request.setAttribute("comments", commentsPaginator);
         }
     }
@@ -164,12 +164,12 @@ public class IndexController extends BaseController {
                                   @RequestParam String author, @RequestParam String mail,
                                   @RequestParam String url, @RequestParam String text, @RequestParam String _csrf_token) {
 
-        String ref = request.getHeader("Referer");
+        String ref = request.getHeader("Referer"); // 简单防刷校验
         if (StringUtils.isBlank(ref) || StringUtils.isBlank(_csrf_token)) {
             return RestResponseBo.fail(ErrorCode.BAD_REQUEST);
         }
 
-        String token = cache.hget(Types.CSRF_TOKEN.getType(), _csrf_token);
+        String token = cache.hget(Types.CSRF_TOKEN.getType(), _csrf_token); // 验证CSRF token
         if (StringUtils.isBlank(token)) {
             return RestResponseBo.fail(ErrorCode.BAD_REQUEST);
         }
@@ -186,7 +186,7 @@ public class IndexController extends BaseController {
             return RestResponseBo.fail("请输入正确的邮箱格式");
         }
 
-        if (StringUtils.isNotBlank(url) && !PatternKit.isURL(url)) {
+        if (StringUtils.isNotBlank(url) && !PatternKit.isURL(url)) { // URL格式校验
             return RestResponseBo.fail("请输入正确的URL格式");
         }
 
@@ -194,16 +194,16 @@ public class IndexController extends BaseController {
             return RestResponseBo.fail("请输入200个字符以内的评论");
         }
 
-        String val = IPKit.getIpAddrByRequest(request) + ":" + cid;
+        String val = IPKit.getIpAddrByRequest(request) + ":" + cid; // 同一IP对同一文章的频率限制
         Integer count = cache.hget(Types.COMMENTS_FREQUENCY.getType(), val);
         if (null != count && count > 0) {
             return RestResponseBo.fail("您发表评论太快了，请过会再试");
         }
 
-        author = TaleUtils.cleanXSS(author);
+        author = TaleUtils.cleanXSS(author); // XSS过滤
         text = TaleUtils.cleanXSS(text);
 
-        author = EmojiParser.parseToAliases(author);
+        author = EmojiParser.parseToAliases(author); // emoji转义
         text = EmojiParser.parseToAliases(text);
 
         CommentVo comments = new CommentVo();
@@ -215,14 +215,14 @@ public class IndexController extends BaseController {
         comments.setMail(mail);
         comments.setParent(coid);
         try {
-            commentService.insertComment(comments);
-            cookie("tale_remember_author", URLEncoder.encode(author, "UTF-8"), 7 * 24 * 60 * 60, response);
+            commentService.insertComment(comments); // 入库
+            cookie("tale_remember_author", URLEncoder.encode(author, "UTF-8"), 7 * 24 * 60 * 60, response); // 记住资料
             cookie("tale_remember_mail", URLEncoder.encode(mail, "UTF-8"), 7 * 24 * 60 * 60, response);
             if (StringUtils.isNotBlank(url)) {
                 cookie("tale_remember_url", URLEncoder.encode(url, "UTF-8"), 7 * 24 * 60 * 60, response);
             }
             // 设置对每个文章1分钟可以评论一次
-            cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 60);
+            cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 60); // 频控写入
             return RestResponseBo.ok();
         } catch (Exception e) {
             String msg = "评论发布失败";
@@ -249,13 +249,13 @@ public class IndexController extends BaseController {
     @GetMapping(value = "category/{keyword}/{page}")
     public String categories(HttpServletRequest request, @PathVariable String keyword,
                              @PathVariable int page, @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        page = page < 0 || page > WebConst.MAX_PAGE ? 1 : page;
-        MetaDto metaDto = metaService.getMeta(Types.CATEGORY.getType(), keyword);
+        page = page < 0 || page > WebConst.MAX_PAGE ? 1 : page; // 页码边界
+        MetaDto metaDto = metaService.getMeta(Types.CATEGORY.getType(), keyword); // 分类信息
         if (null == metaDto) {
             return this.render_404();
         }
 
-        PageInfo<ContentVo> contentsPaginator = contentService.getArticles(metaDto.getMid(), page, limit);
+        PageInfo<ContentVo> contentsPaginator = contentService.getArticles(metaDto.getMid(), page, limit); // 分类文章
 
         request.setAttribute("articles", contentsPaginator);
         request.setAttribute("meta", metaDto);
@@ -273,7 +273,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = "archives")
     public String archives(HttpServletRequest request) {
-        List<ArchiveBo> archives = siteService.getArchives();
+        List<ArchiveBo> archives = siteService.getArchives(); // 归档数据
         request.setAttribute("archives", archives);
         return this.render("archives");
     }
@@ -285,7 +285,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = "links")
     public String links(HttpServletRequest request) {
-        List<MetaVo> links = metaService.getMetas(Types.LINK.getType());
+        List<MetaVo> links = metaService.getMetas(Types.LINK.getType()); // 友链列表
         request.setAttribute("links", links);
         return this.render("links");
     }
@@ -295,7 +295,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = "/{pagename}")
     public String page(@PathVariable String pagename, HttpServletRequest request) {
-        ContentVo contents = contentService.getContents(pagename);
+        ContentVo contents = contentService.getContents(pagename); // 通过slug获取页面
         if (null == contents) {
             return this.render_404();
         }
@@ -304,11 +304,11 @@ public class IndexController extends BaseController {
             if (StringUtils.isBlank(cp)) {
                 cp = "1";
             }
-            PageInfo<CommentBo> commentsPaginator = commentService.getComments(contents.getCid(), Integer.parseInt(cp), 6);
+            PageInfo<CommentBo> commentsPaginator = commentService.getComments(contents.getCid(), Integer.parseInt(cp), 6); // 评论分页
             request.setAttribute("comments", commentsPaginator);
         }
         request.setAttribute("article", contents);
-        updateArticleHit(contents.getCid(), contents.getHits());
+        updateArticleHit(contents.getCid(), contents.getHits()); // 更新点击量
         return this.render("page");
     }
 
@@ -326,8 +326,8 @@ public class IndexController extends BaseController {
 
     @GetMapping(value = "search/{keyword}/{page}")
     public String search(HttpServletRequest request, @PathVariable String keyword, @PathVariable int page, @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        page = page < 0 || page > WebConst.MAX_PAGE ? 1 : page;
-        PageInfo<ContentVo> articles = contentService.getArticles(keyword, page, limit);
+        page = page < 0 || page > WebConst.MAX_PAGE ? 1 : page; // 页码边界
+        PageInfo<ContentVo> articles = contentService.getArticles(keyword, page, limit); // 关键字搜索
         request.setAttribute("articles", articles);
         request.setAttribute("type", "搜索");
         request.setAttribute("keyword", keyword);
@@ -342,19 +342,19 @@ public class IndexController extends BaseController {
      */
     @Transactional(rollbackFor = TipException.class)
     private void updateArticleHit(Integer cid, Integer chits) {
-        Integer hits = cache.hget("article", "hits");
+        Integer hits = cache.hget("article", "hits"); // 累计命中数
         if (chits == null) {
             chits = 0;
         }
-        hits = null == hits ? 1 : hits + 1;
-        if (hits >= WebConst.HIT_EXCEED) {
+        hits = null == hits ? 1 : hits + 1; // 懒更新计数
+        if (hits >= WebConst.HIT_EXCEED) { // 超过阈值时写库
             ContentVo temp = new ContentVo();
             temp.setCid(cid);
             temp.setHits(chits + hits);
             contentService.updateContentByCid(temp);
-            cache.hset("article", "hits", 1);
+            cache.hset("article", "hits", 1); // 计数重置
         } else {
-            cache.hset("article", "hits", hits);
+            cache.hset("article", "hits", hits); // 仅更新缓存
         }
     }
 
@@ -407,10 +407,10 @@ public class IndexController extends BaseController {
      * @param response
      */
     private void cookie(String name, String value, int maxAge, HttpServletResponse response) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setMaxAge(maxAge);
-        cookie.setSecure(false);
-        response.addCookie(cookie);
+        Cookie cookie = new Cookie(name, value); // 新建cookie
+        cookie.setMaxAge(maxAge); // 过期时间
+        cookie.setSecure(false); // 非HTTPS也可
+        response.addCookie(cookie); // 写入响应
     }
 
 }

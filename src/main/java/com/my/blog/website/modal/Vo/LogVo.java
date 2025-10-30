@@ -3,42 +3,32 @@ package com.my.blog.website.modal.Vo;
 import java.io.Serializable;
 
 /**
- * @author 
- */
+ * 日志值对象（Log Value Object）, 用于记录系统操作日志，对应数据库中的日志表
+*/
 public class LogVo implements Serializable {
-    /**
-     * 日志主键
-     */
+    //序列化版本ID
+    private static final long serialVersionUID = 1L;
+
+    // ========== 日志相关属性 ==========
+    //日志主键,日志记录的唯一标识
     private Integer id;
 
-    /**
-     * 产生的动作
-     */
+    //产生的动作,记录用户执行的操作，如："用户登录"、"发布文章"等
     private String action;
 
-    /**
-     * 产生的数据
-     */
+    // 产生的数据,操作相关的数据，通常以JSON格式存储
     private String data;
 
-    /**
-     * 发生人id
-     */
+    //发生人id, 执行操作的用户ID
     private Integer authorId;
 
-    /**
-     * 日志产生的ip
-     */
+    //日志产生的ip,记录操作来源的IP地址，用于安全审计
     private String ip;
 
-    /**
-     * 日志创建时间
-     */
+    //日志创建时间, 操作发生的时间戳
     private Integer created;
 
-
-
-    private static final long serialVersionUID = 1L;
+    // ========== Getter和Setter方法 ==========
 
     public Integer getId() {
         return id;

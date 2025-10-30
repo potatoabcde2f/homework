@@ -3,20 +3,34 @@ package com.my.blog.website.modal.Vo;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * MyBatis Generator自动生成的Example类，用于构建用户表的动态查询条件
+ * 提供用户信息的各种查询条件构建功能
+ */
 public class UserVoExample {
+    // ORDER BY 子句，用于排序
     protected String orderByClause;
 
+    // 是否去重查询
     protected boolean distinct;
 
+    // 查询条件列表，可以包含多个OR条件
     protected List<Criteria> oredCriteria;
 
+    // 分页限制，限制返回记录数
     private Integer limit;
 
+    // 分页偏移量，用于分页查询
     private Integer offset;
 
+    /**
+     * 构造函数，初始化查询条件列表
+     */
     public UserVoExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
+
+    // ================ 基本getter/setter方法 ================
 
     public void setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
@@ -38,16 +52,29 @@ public class UserVoExample {
         return oredCriteria;
     }
 
+    /**
+     * 添加OR条件
+     * @param criteria 已创建的Criteria对象
+     */
     public void or(Criteria criteria) {
         oredCriteria.add(criteria);
     }
 
+    /**
+     * 创建OR条件并返回，用于链式调用
+     * @return 新创建的Criteria对象
+     */
     public Criteria or() {
         Criteria criteria = createCriteriaInternal();
         oredCriteria.add(criteria);
         return criteria;
     }
 
+    /**
+     * 创建查询条件
+     * 如果当前没有条件，则添加一个默认条件
+     * @return Criteria对象
+     */
     public Criteria createCriteria() {
         Criteria criteria = createCriteriaInternal();
         if (oredCriteria.size() == 0) {
@@ -56,16 +83,25 @@ public class UserVoExample {
         return criteria;
     }
 
+    /**
+     * 内部创建Criteria对象
+     * @return 新创建的Criteria对象
+     */
     protected Criteria createCriteriaInternal() {
         Criteria criteria = new Criteria();
         return criteria;
     }
 
+    /**
+     * 清空所有查询条件、排序和去重设置
+     */
     public void clear() {
         oredCriteria.clear();
         orderByClause = null;
         distinct = false;
     }
+
+    // ================ 分页相关方法 ================
 
     public void setLimit(Integer limit) {
         this.limit = limit;
@@ -83,7 +119,12 @@ public class UserVoExample {
         return offset;
     }
 
+    /**
+     * 抽象的GeneratedCriteria类
+     * 包含所有字段的查询条件方法，由MyBatis Generator自动生成
+     */
     protected abstract static class GeneratedCriteria {
+        // 条件列表，存储所有的查询条件
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {
@@ -91,6 +132,10 @@ public class UserVoExample {
             criteria = new ArrayList<Criterion>();
         }
 
+        /**
+         * 判断是否有有效条件
+         * @return 如果有条件返回true，否则返回false
+         */
         public boolean isValid() {
             return criteria.size() > 0;
         }
@@ -103,6 +148,10 @@ public class UserVoExample {
             return criteria;
         }
 
+        /**
+         * 添加无条件查询条件（如IS NULL, IS NOT NULL）
+         * @param condition 条件表达式
+         */
         protected void addCriterion(String condition) {
             if (condition == null) {
                 throw new RuntimeException("Value for condition cannot be null");
@@ -110,6 +159,12 @@ public class UserVoExample {
             criteria.add(new Criterion(condition));
         }
 
+        /**
+         * 添加单值查询条件
+         * @param condition 条件表达式
+         * @param value 条件值
+         * @param property 属性名
+         */
         protected void addCriterion(String condition, Object value, String property) {
             if (value == null) {
                 throw new RuntimeException("Value for " + property + " cannot be null");
@@ -117,12 +172,22 @@ public class UserVoExample {
             criteria.add(new Criterion(condition, value));
         }
 
+        /**
+         * 添加范围查询条件
+         * @param condition 条件表达式
+         * @param value1 起始值
+         * @param value2 结束值
+         * @param property 属性名
+         */
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
             if (value1 == null || value2 == null) {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
         }
+
+        // ================ uid字段的查询条件 ================
+        // 用户ID，主键
 
         public Criteria andUidIsNull() {
             addCriterion("uid is null");
@@ -183,6 +248,9 @@ public class UserVoExample {
             addCriterion("uid not between", value1, value2, "uid");
             return (Criteria) this;
         }
+
+        // ================ username字段的查询条件 ================
+        // 用户名，用于登录
 
         public Criteria andUsernameIsNull() {
             addCriterion("username is null");
@@ -254,6 +322,9 @@ public class UserVoExample {
             return (Criteria) this;
         }
 
+        // ================ password字段的查询条件 ================
+        // 密码，加密存储
+
         public Criteria andPasswordIsNull() {
             addCriterion("password is null");
             return (Criteria) this;
@@ -323,6 +394,9 @@ public class UserVoExample {
             addCriterion("password not between", value1, value2, "password");
             return (Criteria) this;
         }
+
+        // ================ email字段的查询条件 ================
+        // 邮箱地址
 
         public Criteria andEmailIsNull() {
             addCriterion("email is null");
@@ -394,6 +468,9 @@ public class UserVoExample {
             return (Criteria) this;
         }
 
+        // ================ home_url字段的查询条件 ================
+        // 个人主页URL
+
         public Criteria andHomeUrlIsNull() {
             addCriterion("home_url is null");
             return (Criteria) this;
@@ -463,6 +540,9 @@ public class UserVoExample {
             addCriterion("home_url not between", value1, value2, "homeUrl");
             return (Criteria) this;
         }
+
+        // ================ screen_name字段的查询条件 ================
+        // 显示名称，昵称
 
         public Criteria andScreenNameIsNull() {
             addCriterion("screen_name is null");
@@ -534,6 +614,9 @@ public class UserVoExample {
             return (Criteria) this;
         }
 
+        // ================ created字段的查询条件 ================
+        // 创建时间，时间戳格式
+
         public Criteria andCreatedIsNull() {
             addCriterion("created is null");
             return (Criteria) this;
@@ -593,6 +676,9 @@ public class UserVoExample {
             addCriterion("created not between", value1, value2, "created");
             return (Criteria) this;
         }
+
+        // ================ activated字段的查询条件 ================
+        // 激活时间，时间戳格式
 
         public Criteria andActivatedIsNull() {
             addCriterion("activated is null");
@@ -654,6 +740,9 @@ public class UserVoExample {
             return (Criteria) this;
         }
 
+        // ================ logged字段的查询条件 ================
+        // 最后登录时间，时间戳格式
+
         public Criteria andLoggedIsNull() {
             addCriterion("logged is null");
             return (Criteria) this;
@@ -713,6 +802,9 @@ public class UserVoExample {
             addCriterion("logged not between", value1, value2, "logged");
             return (Criteria) this;
         }
+
+        // ================ group_name字段的查询条件 ================
+        // 用户组名称，用于权限控制
 
         public Criteria andGroupNameIsNull() {
             addCriterion("group_name is null");
@@ -786,29 +878,42 @@ public class UserVoExample {
     }
 
     /**
+     * Criteria类，继承GeneratedCriteria
+     * 用于外部创建查询条件，提供公共的构造函数
      */
     public static class Criteria extends GeneratedCriteria {
-
         protected Criteria() {
             super();
         }
     }
 
+    /**
+     * Criterion类
+     * 表示单个查询条件，封装条件表达式和值
+     */
     public static class Criterion {
+        // 条件表达式，如"uid =", "username is null"等
         private String condition;
 
+        // 条件值
         private Object value;
 
+        // 第二个条件值（用于BETWEEN操作）
         private Object secondValue;
 
+        // 标记类型：无值条件（如IS NULL）
         private boolean noValue;
 
+        // 标记类型：单值条件（如=, >, <等）
         private boolean singleValue;
 
+        // 标记类型：范围值条件（BETWEEN）
         private boolean betweenValue;
 
+        // 标记类型：列表值条件（IN）
         private boolean listValue;
 
+        // 类型处理器，用于处理特定类型的值
         private String typeHandler;
 
         public String getCondition() {
@@ -843,6 +948,10 @@ public class UserVoExample {
             return typeHandler;
         }
 
+        /**
+         * 无值构造函数（用于IS NULL, IS NOT NULL等）
+         * @param condition 条件表达式
+         */
         protected Criterion(String condition) {
             super();
             this.condition = condition;
@@ -850,6 +959,12 @@ public class UserVoExample {
             this.noValue = true;
         }
 
+        /**
+         * 单值或列表值构造函数
+         * @param condition 条件表达式
+         * @param value 条件值
+         * @param typeHandler 类型处理器
+         */
         protected Criterion(String condition, Object value, String typeHandler) {
             super();
             this.condition = condition;
@@ -866,6 +981,13 @@ public class UserVoExample {
             this(condition, value, null);
         }
 
+        /**
+         * 范围值构造函数（用于BETWEEN操作）
+         * @param condition 条件表达式
+         * @param value1 起始值
+         * @param value2 结束值
+         * @param typeHandler 类型处理器
+         */
         protected Criterion(String condition, Object value, Object secondValue, String typeHandler) {
             super();
             this.condition = condition;

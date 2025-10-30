@@ -9,25 +9,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import javax.annotation.Resource;
 
-/**
- * 向mvc中添加自定义组件
- * Created by BlueT on 2017/3/9.
- */
+/** MVC配置，注册拦截器和静态资源 */
 @Component
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Resource
     private BaseInterceptor baseInterceptor;
+
+    /** 添加拦截器配置 */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(baseInterceptor);
     }
 
-    /**
-     * 添加静态资源文件，外部可以直接访问地址
-     * @param registry
-     */
+    /** 配置静态资源访问路径 */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // 配置上传文件访问路径
         registry.addResourceHandler("/upload/**").addResourceLocations("file:"+ TaleUtils.getUplodFilePath()+"upload/");
         super.addResourceHandlers(registry);
     }

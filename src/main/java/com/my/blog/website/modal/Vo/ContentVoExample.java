@@ -1,53 +1,123 @@
+// 定义这个类所在的包路径
 package com.my.blog.website.modal.Vo;
 
+// 导入集合框架相关的类
+// ArrayList是动态数组实现，List是集合接口
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 内容查询条件示例类 (ContentVo Example)
+ * 用于构建文章内容的复杂数据库查询条件
+ * 对应ContentVo对象的动态SQL查询构建
+ * 知识点：Example类是MyBatis Generator的核心组件，用于替代手写SQL
+ */
 public class ContentVoExample {
+    /**
+     * ORDER BY子句 - SQL排序条件
+     * 示例："created DESC, hits DESC" 按创建时间降序，点击量降序
+     * protected修饰符：同包类或子类可以访问
+     */
     protected String orderByClause;
 
+    /**
+     * 去重标志 - 对应SQL的DISTINCT关键字
+     * 用于去除查询结果中的重复记录
+     */
     protected boolean distinct;
 
+    /**
+     * OR条件列表 - 存储所有用OR连接的查询条件组
+     * List<Criteria>使用泛型确保类型安全
+     * 知识点：每个Criteria代表一组用AND连接的条件
+     */
     protected List<Criteria> oredCriteria;
 
+    /**
+     * 查询限制条数 - 对应SQL的LIMIT子句
+     * 用于分页查询，限制返回记录数量
+     */
     private Integer limit;
 
+    /**
+     * 查询偏移量 - 对应SQL的OFFSET子句
+     * 用于分页查询，指定跳过的记录数
+     */
     private Integer offset;
 
+    /**
+     * 构造函数 - 初始化Example对象
+     * 创建空的OR条件列表，为后续条件构建做准备
+     */
     public ContentVoExample() {
+        // 初始化条件列表为空ArrayList
+        // ArrayList初始容量为10，随着元素添加自动扩容
         oredCriteria = new ArrayList<Criteria>();
     }
 
+    /**
+     * 设置排序子句
+     * @param orderByClause 排序条件字符串
+     */
     public void setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
     }
 
+    /**
+     * 获取当前排序子句
+     * @return 排序条件字符串，可能为null
+     */
     public String getOrderByClause() {
         return orderByClause;
     }
 
+    /**
+     * 设置是否去重
+     * @param distinct true表示去重，false表示不去重
+     */
     public void setDistinct(boolean distinct) {
         this.distinct = distinct;
     }
 
+    /**
+     * 判断是否设置去重
+     * @return 去重标志状态
+     */
     public boolean isDistinct() {
         return distinct;
     }
 
+    /**
+     * 获取所有OR条件组
+     * @return OR条件组列表
+     */
     public List<Criteria> getOredCriteria() {
         return oredCriteria;
     }
 
+    /**
+     * 添加现有的条件组（OR连接）
+     * @param criteria 已构建的条件组对象
+     */
     public void or(Criteria criteria) {
         oredCriteria.add(criteria);
     }
 
+    /**
+     * 创建并添加新的条件组（OR连接）
+     * @return 新创建的条件组对象，用于链式调用
+     */
     public Criteria or() {
         Criteria criteria = createCriteriaInternal();
         oredCriteria.add(criteria);
         return criteria;
     }
 
+    /**
+     * 创建查询条件组（主要入口方法）
+     * 如果当前没有条件组，自动创建并添加一个
+     * @return 条件组对象
+     */
     public Criteria createCriteria() {
         Criteria criteria = createCriteriaInternal();
         if (oredCriteria.size() == 0) {
@@ -56,53 +126,106 @@ public class ContentVoExample {
         return criteria;
     }
 
+    /**
+     * 创建条件组内部方法
+     * @return 新的条件组对象
+     */
     protected Criteria createCriteriaInternal() {
         Criteria criteria = new Criteria();
         return criteria;
     }
 
+    /**
+     * 清空所有查询条件
+     * 重置查询构建器状态
+     */
     public void clear() {
         oredCriteria.clear();
         orderByClause = null;
         distinct = false;
     }
 
+    /**
+     * 设置查询限制条数
+     * @param limit 最大返回记录数
+     */
     public void setLimit(Integer limit) {
         this.limit = limit;
     }
 
+    /**
+     * 获取查询限制条数
+     * @return 限制条数
+     */
     public Integer getLimit() {
         return limit;
     }
 
+    /**
+     * 设置查询偏移量
+     * @param offset 跳过的记录数
+     */
     public void setOffset(Integer offset) {
         this.offset = offset;
     }
 
+    /**
+     * 获取查询偏移量
+     * @return 偏移量
+     */
     public Integer getOffset() {
         return offset;
     }
 
+    /**
+     * 抽象静态内部类 - 条件生成基类
+     * 封装所有字段的通用查询条件方法
+     * abstract表示不能直接实例化
+     * static表示不依赖外部类实例
+     */
     protected abstract static class GeneratedCriteria {
+        /**
+         * 条件元素列表
+         * 存储具体的查询条件，每个Criterion代表一个条件
+         */
         protected List<Criterion> criteria;
 
+        /**
+         * 构造函数 - 初始化条件列表
+         */
         protected GeneratedCriteria() {
             super();
             criteria = new ArrayList<Criterion>();
         }
 
+        /**
+         * 判断是否有有效条件
+         * @return 条件列表不为空返回true
+         */
         public boolean isValid() {
             return criteria.size() > 0;
         }
 
+        /**
+         * 获取所有条件元素
+         * @return 条件元素列表
+         */
         public List<Criterion> getAllCriteria() {
             return criteria;
         }
 
+        /**
+         * 获取条件列表
+         * @return 条件元素列表
+         */
         public List<Criterion> getCriteria() {
             return criteria;
         }
 
+        /**
+         * 添加无值条件
+         * @param condition 条件字符串
+         */
         protected void addCriterion(String condition) {
             if (condition == null) {
                 throw new RuntimeException("Value for condition cannot be null");
@@ -110,6 +233,12 @@ public class ContentVoExample {
             criteria.add(new Criterion(condition));
         }
 
+        /**
+         * 添加单值条件
+         * @param condition 条件字符串
+         * @param value 条件值
+         * @param property 属性名
+         */
         protected void addCriterion(String condition, Object value, String property) {
             if (value == null) {
                 throw new RuntimeException("Value for " + property + " cannot be null");
@@ -117,12 +246,21 @@ public class ContentVoExample {
             criteria.add(new Criterion(condition, value));
         }
 
+        /**
+         * 添加范围条件
+         * @param condition 条件字符串
+         * @param value1 起始值
+         * @param value2 结束值
+         * @param property 属性名
+         */
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
             if (value1 == null || value2 == null) {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
         }
+
+        // ========== 文章ID字段条件方法 ==========
 
         public Criteria andCidIsNull() {
             addCriterion("cid is null");
@@ -184,6 +322,8 @@ public class ContentVoExample {
             return (Criteria) this;
         }
 
+        // ========== 文章标题字段条件方法 ==========
+
         public Criteria andTitleIsNull() {
             addCriterion("title is null");
             return (Criteria) this;
@@ -224,6 +364,11 @@ public class ContentVoExample {
             return (Criteria) this;
         }
 
+        /**
+         * 添加标题模糊匹配条件
+         * @param value 模糊匹配模式
+         * @return 条件对象
+         */
         public Criteria andTitleLike(String value) {
             addCriterion("title like", value, "title");
             return (Criteria) this;
@@ -253,6 +398,8 @@ public class ContentVoExample {
             addCriterion("title not between", value1, value2, "title");
             return (Criteria) this;
         }
+
+        // ========== 文章缩略名字段条件方法 ==========
 
         public Criteria andSlugIsNull() {
             addCriterion("slug is null");
@@ -324,6 +471,8 @@ public class ContentVoExample {
             return (Criteria) this;
         }
 
+        // ========== 创建时间字段条件方法 ==========
+
         public Criteria andCreatedIsNull() {
             addCriterion("created is null");
             return (Criteria) this;
@@ -383,6 +532,8 @@ public class ContentVoExample {
             addCriterion("created not between", value1, value2, "created");
             return (Criteria) this;
         }
+
+        // ========== 修改时间字段条件方法 ==========
 
         public Criteria andModifiedIsNull() {
             addCriterion("modified is null");
@@ -444,6 +595,8 @@ public class ContentVoExample {
             return (Criteria) this;
         }
 
+        // ========== 作者ID字段条件方法 ==========
+
         public Criteria andAuthorIdIsNull() {
             addCriterion("author_id is null");
             return (Criteria) this;
@@ -503,6 +656,8 @@ public class ContentVoExample {
             addCriterion("author_id not between", value1, value2, "authorId");
             return (Criteria) this;
         }
+
+        // ========== 内容类型字段条件方法 ==========
 
         public Criteria andTypeIsNull() {
             addCriterion("type is null");
@@ -574,6 +729,8 @@ public class ContentVoExample {
             return (Criteria) this;
         }
 
+        // ========== 内容状态字段条件方法 ==========
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
@@ -643,6 +800,8 @@ public class ContentVoExample {
             addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
+
+        // ========== 标签字段条件方法 ==========
 
         public Criteria andTagsIsNull() {
             addCriterion("tags is null");
@@ -714,6 +873,8 @@ public class ContentVoExample {
             return (Criteria) this;
         }
 
+        // ========== 分类字段条件方法 ==========
+
         public Criteria andCategoriesIsNull() {
             addCriterion("categories is null");
             return (Criteria) this;
@@ -784,6 +945,8 @@ public class ContentVoExample {
             return (Criteria) this;
         }
 
+        // ========== 点击数字段条件方法 ==========
+
         public Criteria andHitsIsNull() {
             addCriterion("hits is null");
             return (Criteria) this;
@@ -843,6 +1006,8 @@ public class ContentVoExample {
             addCriterion("hits not between", value1, value2, "hits");
             return (Criteria) this;
         }
+
+        // ========== 评论数字段条件方法 ==========
 
         public Criteria andCommentsNumIsNull() {
             addCriterion("comments_num is null");
@@ -904,6 +1069,8 @@ public class ContentVoExample {
             return (Criteria) this;
         }
 
+        // ========== 允许评论字段条件方法 ==========
+
         public Criteria andAllowCommentIsNull() {
             addCriterion("allow_comment is null");
             return (Criteria) this;
@@ -914,6 +1081,12 @@ public class ContentVoExample {
             return (Criteria) this;
         }
 
+        /**
+         * 添加允许评论等于条件
+         * @param value Boolean值
+         * @return 条件对象
+         * 知识点：Boolean是包装类，可以存储null值
+         */
         public Criteria andAllowCommentEqualTo(Boolean value) {
             addCriterion("allow_comment =", value, "allowComment");
             return (Criteria) this;
@@ -963,6 +1136,8 @@ public class ContentVoExample {
             addCriterion("allow_comment not between", value1, value2, "allowComment");
             return (Criteria) this;
         }
+
+        // ========== 允许Ping字段条件方法 ==========
 
         public Criteria andAllowPingIsNull() {
             addCriterion("allow_ping is null");
@@ -1023,6 +1198,8 @@ public class ContentVoExample {
             addCriterion("allow_ping not between", value1, value2, "allowPing");
             return (Criteria) this;
         }
+
+        // ========== 允许Feed字段条件方法 ==========
 
         public Criteria andAllowFeedIsNull() {
             addCriterion("allow_feed is null");
@@ -1086,29 +1263,32 @@ public class ContentVoExample {
     }
 
     /**
+     * 具体条件类 - 继承GeneratedCriteria
+     * 提供扩展点，可以在子类中添加业务特定的条件方法
      */
     public static class Criteria extends GeneratedCriteria {
-
+        /**
+         * 受保护的构造函数
+         * 确保只能通过外部类的createCriteria方法创建实例
+         */
         protected Criteria() {
             super();
         }
     }
 
+    /**
+     * 条件元素类 - 封装单个查询条件
+     * 包含条件字符串、值、类型等信息
+     * 知识点：这是一个不可变的值对象
+     */
     public static class Criterion {
         private String condition;
-
         private Object value;
-
         private Object secondValue;
-
         private boolean noValue;
-
         private boolean singleValue;
-
         private boolean betweenValue;
-
         private boolean listValue;
-
         private String typeHandler;
 
         public String getCondition() {

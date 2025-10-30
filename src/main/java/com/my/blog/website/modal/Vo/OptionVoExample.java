@@ -3,20 +3,32 @@ package com.my.blog.website.modal.Vo;
 import java.util.ArrayList;
 import java.util.List;
 
+/**用于构建OptionVo表的动态查询条件
+ */
 public class OptionVoExample {
+    // ORDER BY 子句
     protected String orderByClause;
 
+    // 是否去重
     protected boolean distinct;
 
+    // 查询条件列表
     protected List<Criteria> oredCriteria;
 
+    // 分页限制
     private Integer limit;
 
+    // 分页偏移量
     private Integer offset;
 
+    /**
+     * 构造函数
+     */
     public OptionVoExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
+
+    // ================ 基本getter/setter方法 ================
 
     public void setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
@@ -38,16 +50,26 @@ public class OptionVoExample {
         return oredCriteria;
     }
 
+    /**
+     * 添加OR条件
+     */
     public void or(Criteria criteria) {
         oredCriteria.add(criteria);
     }
 
+    /**
+     * 创建OR条件并返回
+     */
     public Criteria or() {
         Criteria criteria = createCriteriaInternal();
         oredCriteria.add(criteria);
         return criteria;
     }
 
+    /**
+     * 创建查询条件
+     * 如果当前没有条件，则添加一个默认条件
+     */
     public Criteria createCriteria() {
         Criteria criteria = createCriteriaInternal();
         if (oredCriteria.size() == 0) {
@@ -56,16 +78,24 @@ public class OptionVoExample {
         return criteria;
     }
 
+    /**
+     * 内部创建Criteria对象
+     */
     protected Criteria createCriteriaInternal() {
         Criteria criteria = new Criteria();
         return criteria;
     }
 
+    /**
+     * 清空所有查询条件
+     */
     public void clear() {
         oredCriteria.clear();
         orderByClause = null;
         distinct = false;
     }
+
+    // ================ 分页相关方法 ================
 
     public void setLimit(Integer limit) {
         this.limit = limit;
@@ -83,7 +113,12 @@ public class OptionVoExample {
         return offset;
     }
 
+    /**
+     * 抽象的GeneratedCriteria类
+     * 包含所有字段的查询条件方法
+     */
     protected abstract static class GeneratedCriteria {
+        // 条件列表
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {
@@ -91,6 +126,9 @@ public class OptionVoExample {
             criteria = new ArrayList<Criterion>();
         }
 
+        /**
+         * 判断是否有有效条件
+         */
         public boolean isValid() {
             return criteria.size() > 0;
         }
@@ -103,6 +141,9 @@ public class OptionVoExample {
             return criteria;
         }
 
+        /**
+         * 添加无条件查询条件
+         */
         protected void addCriterion(String condition) {
             if (condition == null) {
                 throw new RuntimeException("Value for condition cannot be null");
@@ -110,6 +151,9 @@ public class OptionVoExample {
             criteria.add(new Criterion(condition));
         }
 
+        /**
+         * 添加单值查询条件
+         */
         protected void addCriterion(String condition, Object value, String property) {
             if (value == null) {
                 throw new RuntimeException("Value for " + property + " cannot be null");
@@ -117,12 +161,17 @@ public class OptionVoExample {
             criteria.add(new Criterion(condition, value));
         }
 
+        /**
+         * 添加范围查询条件
+         */
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
             if (value1 == null || value2 == null) {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
         }
+
+        // ================ name字段的查询条件 ================
 
         public Criteria andNameIsNull() {
             addCriterion("name is null");
@@ -194,6 +243,8 @@ public class OptionVoExample {
             return (Criteria) this;
         }
 
+        // ================ value字段的查询条件 ================
+
         public Criteria andValueIsNull() {
             addCriterion("value is null");
             return (Criteria) this;
@@ -263,6 +314,8 @@ public class OptionVoExample {
             addCriterion("value not between", value1, value2, "value");
             return (Criteria) this;
         }
+
+        // ================ description字段的查询条件 ================
 
         public Criteria andDescriptionIsNull() {
             addCriterion("description is null");
@@ -336,29 +389,42 @@ public class OptionVoExample {
     }
 
     /**
+     * Criteria类，继承GeneratedCriteria
+     * 用于外部创建查询条件
      */
     public static class Criteria extends GeneratedCriteria {
-
         protected Criteria() {
             super();
         }
     }
 
+    /**
+     * Criterion类
+     * 表示单个查询条件
+     */
     public static class Criterion {
+        // 条件表达式
         private String condition;
 
+        // 条件值
         private Object value;
 
+        // 第二个条件值（用于BETWEEN）
         private Object secondValue;
 
+        // 是否无值
         private boolean noValue;
 
+        // 是否单值
         private boolean singleValue;
 
+        // 是否范围值
         private boolean betweenValue;
 
+        // 是否列表值
         private boolean listValue;
 
+        // 类型处理器
         private String typeHandler;
 
         public String getCondition() {
@@ -393,6 +459,9 @@ public class OptionVoExample {
             return typeHandler;
         }
 
+        /**
+         * 无值构造函数（用于IS NULL, IS NOT NULL等）
+         */
         protected Criterion(String condition) {
             super();
             this.condition = condition;
@@ -400,6 +469,9 @@ public class OptionVoExample {
             this.noValue = true;
         }
 
+        /**
+         * 单值构造函数（用于=, <>, >, <, LIKE等）
+         */
         protected Criterion(String condition, Object value, String typeHandler) {
             super();
             this.condition = condition;
@@ -415,6 +487,8 @@ public class OptionVoExample {
         protected Criterion(String condition, Object value) {
             this(condition, value, null);
         }
+
+        //范围值构造函数（用于BETWEEN）
 
         protected Criterion(String condition, Object value, Object secondValue, String typeHandler) {
             super();

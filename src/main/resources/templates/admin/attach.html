@@ -1,47 +1,51 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='文件管理',active='attach'">
+<!-- 文件管理页面 - 上传和管理附件 -->
 <header th:replace="admin/header::headerFragment(${title},${active})"></header>
+<!-- 引入Dropzone上传插件CSS -->
 <link href="//cdn.bootcss.com/dropzone/4.3.0/min/dropzone.min.css" rel="stylesheet"/>
 <style>
+    /* Dropzone上传区域样式 */
     #dropzone {
         margin-bottom: 3rem;
     }
-
+    /* Dropzone基础样式 */
     .dropzone {
         border: 2px dashed #0087F7;
         border-radius: 5px;
         background: white;
     }
-
+    /* Dropzone消息样式 */
     .dropzone .dz-message {
         font-weight: 400;
     }
-
+    /* Dropzone提示文字样式 */
     .dropzone .dz-message .note {
         font-size: 0.8em;
         font-weight: 200;
         display: block;
         margin-top: 1.4rem;
     }
-
+    /* 附件图片样式 */
     .attach-img {
         width: 100px;
         height: 100px;
         border-radius: 10px;
         box-shadow: 0px 0px 8px #333;
     }
-
+    /* 附件文字样式 */
     .attach-text {
         font-size: 12px;
         font-weight: 300;
     }
-
+    /* 附件图片悬停效果 */
     .attach-img:hover {
         background-color: #f9f9f9;
     }
 </style>
 <body class="fixed-left">
 <div id="wrapper">
+    <!-- 引入头部导航 -->
     <div th:replace="admin/header::header-body"></div>
     <div class="content-page">
         <div class="content">
@@ -52,8 +56,9 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 portlets">
-                            <!-- Your awesome content goes here -->
+                            <!-- 文件上传区域 -->
                             <div class="m-b-30">
+                                <!-- Dropzone上传表单 -->
                                 <form action="#" class="dropzone" id="dropzone">
                                     <div class="fallback">
                                         <input name="file" type="file" multiple="multiple"/>
@@ -65,7 +70,9 @@
                             </div>
                         </div>
                     </div>
+                    <!-- 附件列表区域 -->
                     <div class="col-md-12 attach">
+                        <!-- 如果没有附件 -->
                         <th:block th:if="${commons.is_empty(attachs)}">
                             <div class="row">
                                 <div class="col-md-4 text-center">
@@ -75,24 +82,32 @@
                                 </div>
                             </div>
                         </th:block>
+                        <!-- 如果有附件 -->
                         <th:block th:unless="${commons.is_empty(attachs)}">
+                            <!-- 遍历附件列表 -->
                             <th:block th:each="attach : ${attachs.list}">
                                 <div class="col-md-2 text-center m-t-10">
+                                    <!-- 附件链接 -->
                                     <a th:href="${commons.site_url(attach.fkey)}" target="_blank">
+                                        <!-- 附件图片，如果是图片类型显示图片，否则显示默认图标 -->
                                         <img class="attach-img"
                                              th:src="@{${attach.ftype == 'image'}?${attach.fkey}: '/admin/images/attach.png'}"
                                              th:title="${attach.fname}"/>
                                     </a>
+                                    <!-- 附件名称 -->
                                     <div class="clearfix m-t-10">
                 <span class="attach-text" data-toggle="tooltip" data-placement="top"
                       th:attr="data-original-title=${attach.fname}"
                       th:text="${commons.substr(attach.fname, 12)}"></span>
                                     </div>
+                                    <!-- 附件操作按钮 -->
                                     <div class="clearfix">
+                                        <!-- 复制链接按钮 -->
                                         <button th:attr="url=${commons.site_url(attach.fkey)}" type="button"
                                                 class="btn btn-warning btn-sm waves-effect waves-light m-t-5 copy">
                                             <i class="fa fa-copy"></i> <span>复制</span>
                                         </button>
+                                        <!-- 删除附件按钮 -->
                                         <button type="button"
                                                 class="btn btn-danger btn-sm waves-effect waves-light m-t-5"
                                                 th:onclick="'delAttach('+${attach.id}+');'">
@@ -101,44 +116,55 @@
                                     </div>
                                 </div>
                             </th:block>
+                            <!-- 分页导航 -->
                             <div th:replace="comm/macros :: pageAdminNav(${attachs})"></div>
                         </th:block>
                     </div>
                 </div>
+                <!-- 引入页脚内容 -->
                 <div th:replace="admin/footer :: footer-content"></div>
             </div>
         </div>
     </div>
 </div>
+<!-- 引入页脚脚本 -->
 <div th:replace="admin/footer :: footer"></div>
+<!-- 引入Dropzone上传插件JS -->
 <script src="//cdn.bootcss.com/dropzone/4.3.0/min/dropzone.min.js"></script>
+<!-- 引入剪贴板JS -->
 <script src="//cdn.bootcss.com/clipboard.js/1.6.0/clipboard.min.js"></script>
 <script type="text/javascript" th:inline="javascript">
-    /*<![CDATA[*/
+    /* 初始化tale工具对象 */
     var tale = new $.tale();
 
+    /* 初始化Dropzone上传插件 */
     $("#dropzone").dropzone({
         paramName: "file",
         url: "/admin/attach/upload",
         maxFilesize: 1,
         init: function () {
+            /* 上传成功回调 */
             this.on("success", function (file, msg) {
                 console.log(file);
                 if (msg.success !== true) {
                     tale.alertError('上传文件大于1M');
                 }
+                /* 上传成功后刷新页面 */
                 setTimeout(function () {
                     window.location.reload();
                 }, 200);
             });
         }
     });
+
+    /* 初始化剪贴板功能 */
     var clipboard = new Clipboard('button.copy', {
         text: function (trigger) {
             return $(trigger).attr('url');
         }
     });
 
+    /* 剪贴板复制成功回调 */
     clipboard.on('success', function (e) {
         console.info('Action:', e.action);
         console.info('Text:', e.text);
@@ -146,6 +172,7 @@
         e.clearSelection();
     });
 
+    /* 删除附件函数 */
     function delAttach(id) {
         tale.alertConfirm({
             title: '确定删除该附件吗?',
@@ -164,7 +191,6 @@
             }
         });
     }
-    /*]]>*/
 </script>
 </body>
 </html>

@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * Created by 13 on 2017/2/21.
+ * 友链管理控制器。
+ *
+ * - 展示、保存与删除友情链接
  */
 @Controller
 @RequestMapping("admin/links")
@@ -29,14 +31,14 @@ public class LinksController extends BaseController {
     private IMetaService metasService;
 
     /**
-     * 友链
-     * @param request
-     * @return
+     * 友链列表页。
+     * @param request HTTP 请求
+     * @return 模板视图名
      */
     @GetMapping(value = "")
     public String index(HttpServletRequest request) {
-        List<MetaVo> metas = metasService.getMetas(Types.LINK.getType());
-        request.setAttribute("links", metas);
+        List<MetaVo> metas = metasService.getMetas(Types.LINK.getType()); // 查询全部友情链接
+        request.setAttribute("links", metas); // 绑定到模型
         return "admin/links";
     }
 
@@ -48,16 +50,16 @@ public class LinksController extends BaseController {
                                    @RequestParam(value = "sort", defaultValue = "0") int sort) {
         try {
             MetaVo metas = new MetaVo();
-            metas.setName(title);
-            metas.setSlug(url);
-            metas.setDescription(logo);
-            metas.setSort(sort);
-            metas.setType(Types.LINK.getType());
+            metas.setName(title); // 显示标题
+            metas.setSlug(url); // 链接地址
+            metas.setDescription(logo); // logo 地址
+            metas.setSort(sort); // 排序
+            metas.setType(Types.LINK.getType()); // 元类型为链接
             if (null != mid) {
                 metas.setMid(mid);
-                metasService.update(metas);
+                metasService.update(metas); // 更新已存在记录
             } else {
-                metasService.saveMeta(metas);
+                metasService.saveMeta(metas); // 新增记录
             }
         } catch (Exception e) {
             String msg = "友链保存失败";
@@ -76,7 +78,7 @@ public class LinksController extends BaseController {
     @Transactional(rollbackFor = TipException.class)
     public RestResponseBo delete(@RequestParam int mid) {
         try {
-            metasService.delete(mid);
+            metasService.delete(mid); // 删除友链
         } catch (Exception e) {
             String msg = "友链删除失败";
             if (e instanceof TipException) {

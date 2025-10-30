@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 404错误页面 - 页面未找到 -->
 <head>
     <meta charset="utf-8"/>
     <title>404（找不到页面）- My Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <!-- 网站图标 -->
     <link rel="shortcut icon" th:href="@{/admin/images/favicon.png}"/>
+    <!-- 引入Bootstrap CSS -->
     <link th:href="@{//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+    <!-- 引入自定义样式 -->
     <link th:href="@{/admin/css/style.min.css}" rel="stylesheet" type="text/css"/>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"/>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"/>
-    <![endif]-->
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
 </head>
 <body>
-
+<!-- 错误页面内容区域 -->
 <div class="wrapper-page">
     <div class="ex-page-content text-center">
+        <!-- 404错误标题 -->
         <h1>404!</h1>
+        <!-- 错误描述 -->
         <h2>很抱歉，没有找到这个页面！</h2>
-         <br></br>
+        <br></br>
+        <!-- 返回首页按钮 -->
         <a class="btn btn-purple waves-effect waves-light" href="/"><i class="fa fa-angle-left"></i> 返回首页</a>
     </div>
 </div>

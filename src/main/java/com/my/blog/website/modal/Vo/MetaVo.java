@@ -2,44 +2,35 @@ package com.my.blog.website.modal.Vo;
 
 import java.io.Serializable;
 
-/**
- * @author 
+/**元数据值对象（Meta Value Object）,用于存储分类、标签等元数据信息
+ * 对应数据库中的meta表
  */
 public class MetaVo implements Serializable {
-    /**
-     * 项目主键
-     */
+    //项目主键,元数据的唯一标识
     private Integer mid;
 
-    /**
-     * 名称
-     */
+    //名称,如：分类名称、标签名称
     private String name;
 
-    /**
-     * 项目缩略名
-     */
+    //项目缩略名,用于URL的友好名称
     private String slug;
 
-    /**
-     * 项目类型
-     */
+    //项目类型,如：category（分类）、tag（标签）等
     private String type;
 
-    /**
-     * 选项描述
-     */
+    //选项描述,分类或标签的描述信息
     private String description;
 
-    /**
-     * 项目排序
-     */
+    //项目排序,用于控制显示顺序
     private Integer sort;
 
+    //父级ID, 用于实现多级分类
     private Integer parent;
 
+    //序列化版本ID
     private static final long serialVersionUID = 1L;
 
+    // Getter和Setter方法
     public Integer getMid() {
         return mid;
     }

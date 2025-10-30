@@ -6,14 +6,11 @@ import com.my.blog.website.utils.MapCache;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by 13 on 2017/2/21.
- */
 public abstract class BaseController {
 
-    public static String THEME = "themes/default";
+    public static String THEME = "themes/default"; // 前台主题根路径
 
-    protected MapCache cache = MapCache.single();
+    protected MapCache cache = MapCache.single(); // 简单内存缓存（单例）
 
     /**
      * 主页的页面主题
@@ -21,16 +18,16 @@ public abstract class BaseController {
      * @return
      */
     public String render(String viewName) {
-        return THEME + "/" + viewName;
+        return THEME + "/" + viewName; // 拼接主题路径
     }
 
     public BaseController title(HttpServletRequest request, String title) {
-        request.setAttribute("title", title);
+        request.setAttribute("title", title); // 设置页面标题
         return this;
     }
 
     public BaseController keywords(HttpServletRequest request, String keywords) {
-        request.setAttribute("keywords", keywords);
+        request.setAttribute("keywords", keywords); // 设置页面关键词
         return this;
     }
 
@@ -40,15 +37,15 @@ public abstract class BaseController {
      * @return
      */
     public UserVo user(HttpServletRequest request) {
-        return TaleUtils.getLoginUser(request);
+        return TaleUtils.getLoginUser(request); // 从请求中解析当前登录用户
     }
 
     public Integer getUid(HttpServletRequest request){
-        return this.user(request).getUid();
+        return this.user(request).getUid(); // 便捷获取用户ID
     }
 
     public String render_404() {
-        return "comm/error_404";
+        return "comm/error_404"; // 返回404页面
     }
 
 }

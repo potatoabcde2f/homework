@@ -15,16 +15,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = TipException.class)
     public String tipException(Exception e) {
-        LOGGER.error("find exception:e={}",e.getMessage());
-        e.printStackTrace();
-        return "comm/error_500";
+        LOGGER.error("find exception:e={}",e.getMessage()); // 业务异常日志
+        e.printStackTrace(); // 打印堆栈方便定位
+        return "comm/error_500"; // 返回500错误页
     }
 
 
     @ExceptionHandler(value = Exception.class)
     public String exception(Exception e){
-        LOGGER.error("find exception:e={}",e.getMessage());
+        LOGGER.error("find exception:e={}",e.getMessage()); // 兜底异常
         e.printStackTrace();
-        return "comm/error_404";
+        return "comm/error_404"; // 非预期错误统一到404
     }
 }

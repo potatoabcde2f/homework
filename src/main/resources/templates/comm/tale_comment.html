@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tale_comment">
+<!-- 评论功能脚本片段 - 提供评论相关的前端功能 -->
 <body>
 <script type="text/javascript">
-    /*<![CDATA[*/
     (function () {
+        /* 评论功能主对象 **/
         window.TaleComment = {
+            /* 根据ID获取DOM元素 */
             dom: function (id) {
                 return document.getElementById(id);
             },
+
+            /* 创建DOM元素 */
             create: function (tag, attr) {
                 var el = document.createElement(tag);
                 for (var key in attr) {
@@ -15,33 +19,42 @@
                 }
                 return el;
             },
+
+            /* 回复评论功能 */
             reply: function (coid) {
                 $('#comment-form input[name=coid]').val(coid);
                 $("html,body").animate({scrollTop: $('div.comment-container').offset().top}, 500);
                 $('#comment-form #textarea').focus();
             },
+
+            /*  提交评论 */
             subComment: function () {
                 $.ajax({
                     type: 'post',
-                    url: '/comment',
-                    data: $('#comment-form').serialize(),
-                    async: false,
+                    url: '/comment', // 评论提交地址
+                    data: $('#comment-form').serialize(), // 序列化表单数据
+                    async: false, // 同步请求
                     dataType: 'json',
                     success: function (result) {
+                        // 清空父评论ID
                         $('#comment-form input[name=coid]').val('');
                         if (result && result.success) {
+                            // 评论成功，刷新页面
                             window.location.reload();
                         } else {
+                            // 评论失败，显示错误信息
                             if (result.msg) {
                                 alert(result.msg);
                             }
                         }
                     }
                 });
-                return false;
+                return false; // 阻止默认表单提交
             }
         };
     })();
+
+    /* 获取评论相关的Cookie值 */
     function getCommentCookie(name) {
         var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
         if (arr = document.cookie.match(reg))
@@ -49,13 +62,19 @@
         else
             return null;
     }
+
+    /* 添加评论输入框的默认值 */
     function addCommentInputValue() {
+        // 从Cookie中获取并设置作者名
         document.getElementById('author').value = getCommentCookie('tale_remember_author');
+        // 从Cookie中获取并设置邮箱
         document.getElementById('mail').value = getCommentCookie('tale_remember_mail');
+        // 从Cookie中获取并设置网址
         document.getElementById('url').value = getCommentCookie('tale_remember_url');
     }
+
+    /* 页面加载时自动填充评论输入框 */
     addCommentInputValue();
-    /*]]>*/
 </script>
 </body>
 </html>

@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 文章归档页面：按日期分组显示所有文章 -->
 <div th:replace="themes/default/header::header(title='文章归档',keywords=null)"></div>
 <body>
 <div class="main-content archive-page clearfix">
     <div class="categorys-item">
+        <!-- 循环遍历每个归档日期 -->
         <th:block th:each="archive : ${archives}">
             <div class="categorys-title" th:text="${archive.date}"></div>
             <div class="post-lists">
                 <div class="post-lists-body">
+                    <!-- 循环遍历该日期下的所有文章 -->
                     <th:block th:each="article : ${archive.articles}">
                         <div class="post-list-item">
                             <div class="post-list-item-container">
                                 <div class="item-label">
                                     <div class="item-title">
+                                        <!-- 文章标题链接 -->
                                         <a th:href="${commons.permalink(article.cid, article.slug)}" th:text="${article.title}"></a>
                                     </div>
                                     <div class="item-meta clearfix">
